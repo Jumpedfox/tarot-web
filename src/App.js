@@ -39,7 +39,8 @@ function App() {
   useEffect(() => {
     dispatch(setLoaderIsVisible(true));
     dispatch(setOptionsVisibility(false))
-  }, [dispatch]);
+
+  }, []);
 
   const manualIsVisible = useSelector((state) => state.manual.manualIsVisible);
   const theme = useSelector((state) => state.theme.themeNumber);
@@ -47,6 +48,8 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
           <div className="App">
             {loaderIsVisible && <Loader />} 
             <div
@@ -64,6 +67,8 @@ function App() {
             <OptionsButton />
             <BackgroundMusic />
           </div>
+        </PersistGate>
+      </Provider>
     </BrowserRouter>
   );
 }
