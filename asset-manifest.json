@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/tarot-web/static/css/main.1c6e4c2e.css",
-    "main.js": "/tarot-web/static/js/main.99881697.js",
+    "main.js": "/tarot-web/static/js/main.b5e35ba1.js",
     "static/js/453.6521d77a.chunk.js": "/tarot-web/static/js/453.6521d77a.chunk.js",
     "static/media/mxi-art-id0A-td1JBk-unsplash.jpg": "/tarot-web/static/media/mxi-art-id0A-td1JBk-unsplash.ffc068930490038a2dcb.jpg",
     "static/media/stars-3750824_1280.png": "/tarot-web/static/media/stars-3750824_1280.f6ca7c2bb7caf3fd7930.png",
     "static/media/CinzelDecorative.ttf": "/tarot-web/static/media/CinzelDecorative.c243877d82654b511c69.ttf",
     "index.html": "/tarot-web/index.html",
     "main.1c6e4c2e.css.map": "/tarot-web/static/css/main.1c6e4c2e.css.map",
-    "main.99881697.js.map": "/tarot-web/static/js/main.99881697.js.map",
+    "main.b5e35ba1.js.map": "/tarot-web/static/js/main.b5e35ba1.js.map",
     "453.6521d77a.chunk.js.map": "/tarot-web/static/js/453.6521d77a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.1c6e4c2e.css",
-    "static/js/main.99881697.js"
+    "static/js/main.b5e35ba1.js"
   ]
 }
