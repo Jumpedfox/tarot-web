@@ -1,0 +1,220 @@
+@keyframes rotate {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+@keyframes rotate2 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+.options {
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+  transition: 3s;
+  background: radial-gradient(
+    circle,
+    rgba(156, 66, 134, 0.5) 0%,
+    rgba(2, 0, 36, 0) 70%
+  );
+  z-index: 10;
+  display: flex;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+
+  span {
+    font-size: 16px;
+  }
+
+  button {
+    border: none;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    transition: 1s;
+    -webkit-box-shadow: 0px 0px 15px 1px rgb(255, 255, 255);
+    -moz-box-shadow: 0px 0px 15px 1px rgb(255, 255, 255);
+    box-shadow: 0px 0px 20px 5px rgb(255, 255, 255),
+      inset 0px 0px 10px 1px rgb(255, 255, 255);
+    background-color: rgba(0, 0, 0, 0.6);
+    color: rgb(255, 255, 255);
+
+    &:hover {
+      box-shadow: 0px 0px 50px 1px rgb(255, 255, 255),
+        inset 0px 0px 10px 10px rgb(255, 255, 255);
+    }
+    span {
+      cursor: inherit;
+      transition: 1s;
+    }
+  }
+
+  &-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 660px;
+    z-index: 5;
+    margin-top: 200px;
+    // background-color: rgb(216, 150, 150);
+
+    .active-button {
+      -webkit-box-shadow: 0px 0px 20px 10px rgb(255, 255, 255);
+      -moz-box-shadow: 0px 0px 20px 10px rgb(255, 255, 255);
+      box-shadow: 0px 0px 20px 20px rgb(255, 255, 255),
+        inset 0px 0px 10px 1px rgb(255, 255, 255);
+      background-color: rgb(255, 255, 255);
+      color: black;
+    }
+
+    .volume-buttons {
+      color: white;
+      width: 340px;
+      display: flex;
+      flex-direction: column;
+      div {
+        height: 70px;
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      button {
+        width: 50px;
+        height: 50px;
+      }
+      .active-button {
+        width: 70px;
+        height: 70px;
+        span {
+          font-size: 30px;
+        }
+      }
+    }
+  }
+
+  &-icons {
+    position: absolute;
+    left: 50%;
+    // top: -40%;
+    transform: translate(-50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    // background-color: red;
+    animation: rotate 120s linear infinite;
+    z-index: 4;
+  }
+
+  .icon {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: rotate2 120s linear infinite;
+    transform-origin: center;
+    transition: 1.3s;
+    // background-color: blueviolet;
+
+    &:hover {
+      scale: 1.2;
+      // filter: invert(100%);
+    }
+
+    &1 {
+      top: 5%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/moon-and-stars%20(1).png?alt=media&token=cbf3424c-679f-4a32-8702-a29802d4bb78");
+    }
+
+    &2 {
+      top: 11.5%;
+      left: 71.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/stones.png?alt=media&token=9ca47df1-5752-4e66-8065-5ef032621707");
+    }
+
+    &3 {
+      top: 28.5%;
+      left: 88.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/magic.png?alt=media&token=3512ba19-66bc-4b2b-bcb5-d2e2d10e8567");
+    }
+
+    &4 {
+      top: 50%;
+      left: 95%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/magic-pot.png?alt=media&token=30f9a1c1-824f-4550-96a0-aff3b8dfc50a");
+    }
+
+    &5 {
+      top: 71.5%;
+      left: 88.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/14283232.png?alt=media&token=69d1475a-6c8c-4eda-9281-56b9da40a3d8");
+    }
+
+    &6 {
+      top: 88.5%;
+      left: 71.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/14283573.png?alt=media&token=9dd66b41-bc6a-4009-89c0-fd97b872e031");
+    }
+
+    &7 {
+      top: 95%;
+      left: 50%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/hand.png?alt=media&token=36cb63ea-7097-4744-a970-4401e6ef7a17");
+    }
+
+    &8 {
+      top: 88.5%;
+      left: 28.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/magic-trick.png?alt=media&token=63d0eafd-84db-4731-9111-d29524a16444");
+    }
+
+    &9 {
+      top: 71.5%;
+      left: 11.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/14283367.png?alt=media&token=d6dc6041-ef89-47e2-a882-c1acaab5fa9c");
+    }
+
+    &10 {
+      top: 50%;
+      left: 5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/moon-and-stars.png?alt=media&token=c230752b-8bce-4e0a-81d9-2d6877a79252");
+    }
+
+    &11 {
+      top: 30%;
+      left: 12.5%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/palmistry.png?alt=media&token=f2e91dca-5454-44e9-bf37-6b0931157a33");
+    }
+
+    &12 {
+      top: 12.5%;
+      left: 30%;
+      transform: translateX(-50%) translateY(-50%);
+      background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/weather.png?alt=media&token=392c3f0b-b7b9-42fb-8fe4-ff26aac9d2f0");
+    }
+  }
+}

@@ -1,0 +1,21 @@
+.manual {
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  transform: translate(-50%);
+  z-index: 5;
+  height: 600px;
+  box-sizing: border-box;
+  padding: 10px 0;
+  width: 570px;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  font-size: 26px;
+  backdrop-filter: blur(1px);
+  box-sizing: border-box;
+  padding: 100px 0 350px 0;
+}

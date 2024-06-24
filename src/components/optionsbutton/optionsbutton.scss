@@ -1,0 +1,33 @@
+@keyframes rotate {
+  from {
+    transform: translateX(-50%) rotate(0deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(360deg);
+  }
+}
+
+@keyframes rotate2 {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
+}
+
+.optionsbutton {
+  // transition: 3s;
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  bottom: -8%;
+  width: 200px;
+  height: 200px;
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/tarot-api-708a1.appspot.com/o/Galaxy.png?alt=media&token=5fbcb071-472f-4d41-865a-1630b2894f16");
+  background-size: contain;
+  background-color: transparent;
+  border: none;
+  animation: rotate 60s linear infinite;
+  // background-color: red;
+}

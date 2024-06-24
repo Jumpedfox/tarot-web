@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  
+  .parallax {
+    background-color: rgb(9, 13, 43);
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 110%;
+    height: 110%;
+    position: absolute;
+    z-index: -1;
+    transition: background 1s;
+  }
+  .black-theme {
+    background-image: url("./images/stars-3750824_1280.png");
+  }
+  
+  .blue-theme {
+    background-image: url("./images/mxi-art-id0A-td1JBk-unsplash.jpg");
+    filter: brightness(2);
+  }
+}
