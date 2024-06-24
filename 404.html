@@ -2,16 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 Not Found</title>
+  <title>Redirecting...</title>
   <script>
-    const url = new URL(window.location.href);
-    url.pathname = '/tarot-web/index.html';
-    window.location.replace(url);
+    var path = window.location.pathname;
+    if (path !== '/' && path.substr(-1) !== '/') {
+      window.location.replace('/tarot-web' + path);
+    } else {
+      window.location.replace('/tarot-web/');
+    }
   </script>
 </head>
 <body>
-  <noscript>This page requires JavaScript.</noscript>
+  <p>Redirecting to <a href="/tarot-web/">/tarot-web/</a></p>
 </body>
 </html>
