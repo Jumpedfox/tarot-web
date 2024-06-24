@@ -1,6 +1,6 @@
 import "./meaning.scss";
 import { motion } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Meaning = ({ rotate1, rotate2, rotate3 }) => {
   const card1 = useSelector((state) => state.cards.card1);
