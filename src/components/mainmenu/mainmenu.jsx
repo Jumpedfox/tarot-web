@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux"; 
 import { setNumberOfCards, setManualIsVisible } from "../../redux/appSlice.ts";
-import { useEffect } from "react";
 
 const Mainmenu = () => {
   const navigate = useNavigate();

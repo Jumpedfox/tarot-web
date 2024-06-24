@@ -1,10 +1,8 @@
 import "./options.scss";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setMuted,
-  setNumberOfCards,
   setOnlyMajorArcana,
   setOptionsVisibility,
   setThemeNumber,
@@ -12,7 +10,6 @@ import {
 } from "../../redux/appSlice.ts";
 
 const Options = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const musicVolume = useSelector((state) => state.sound.volume);

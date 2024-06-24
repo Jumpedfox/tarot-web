@@ -1,12 +1,8 @@
 import "./meaning.scss";
-import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import { setNumberOfCards } from "../../redux/appSlice.ts";
 
 const Meaning = ({ rotate1, rotate2, rotate3 }) => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const card1 = useSelector((state) => state.cards.card1);
   const card2 = useSelector((state) => state.cards.card2);
   const card3 = useSelector((state) => state.cards.card3);

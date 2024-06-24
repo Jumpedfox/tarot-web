@@ -1,5 +1,4 @@
 .card {
-  // background-color: rgb(168, 168, 224);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -10,7 +9,6 @@
   overflow: hidden;
   position: absolute;
   top: 30px;
-  // border: 2px solid rgb(255, 255, 255);
 
   &-pic {
     height: 490px;

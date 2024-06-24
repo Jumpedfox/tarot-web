@@ -17,7 +17,6 @@
 }
 
 .optionsbutton {
-  // transition: 3s;
   position: absolute;
   left: 50%;
   transform: translate(-50%);
@@ -29,5 +28,4 @@
   background-color: transparent;
   border: none;
   animation: rotate 60s linear infinite;
-  // background-color: red;
 }

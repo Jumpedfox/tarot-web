@@ -1,7 +1,7 @@
 {
   "name": "tarot-web",
   "version": "0.1.0",
-  "homepage": "https://jumpedfox.github.io/tarot-web",
+  "homepage": "https://jumpedfox.github.io/tarot-web/",
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
