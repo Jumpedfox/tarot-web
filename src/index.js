@@ -1,21 +1,36 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/lib/integration/react";
+import { ChakraProvider, Spinner, Center } from "@chakra-ui/react";
 import "./index.css";
 import App from "./App";
-import reportWebVitals from "./reportWebVitals";
 import store, { persistor } from "./redux/store.ts";
-import { PersistGate } from "redux-persist/lib/integration/react";
-import { Provider } from "react-redux";
+import { system } from "./theme";
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const container = document.getElementById("root");
+
+if (!container) {
+  throw new Error("Root container missing in index.html");
+}
+
+const root = ReactDOM.createRoot(container);
 
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <App />
-      </PersistGate>
+      <ChakraProvider value={system}>
+        <PersistGate
+          loading={
+            <Center h="100vh">
+              <Spinner size="xl" color="white" />
+            </Center>
+          }
+          persistor={persistor}
+        >
+          <App />
+        </PersistGate>
+      </ChakraProvider>
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );
-reportWebVitals();
