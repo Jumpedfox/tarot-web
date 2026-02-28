@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/tarot-web/static/css/main.5021c1c4.css",
+    "main.js": "/tarot-web/static/js/main.ff2ad2cd.js",
+    "static/media/bg2.jpg": "/tarot-web/static/media/bg2.71044b4ae39202121525.jpg",
+    "static/media/spiral2.png": "/tarot-web/static/media/spiral2.6b46322c13020de85460.png",
+    "static/media/CinzelDecorative.ttf": "/tarot-web/static/media/CinzelDecorative.c243877d82654b511c69.ttf",
+    "index.html": "/tarot-web/index.html",
+    "main.5021c1c4.css.map": "/tarot-web/static/css/main.5021c1c4.css.map",
+    "main.ff2ad2cd.js.map": "/tarot-web/static/js/main.ff2ad2cd.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5021c1c4.css",
+    "static/js/main.ff2ad2cd.js"
+  ]
+}
