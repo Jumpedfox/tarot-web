@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404 Not Found</title>
+  <title>404</title>
   <script>
-    const url = new URL(window.location.href);
-    url.pathname = '/tarot-web/index.html';
-    window.location.replace(url);
+    var l = window.location;
+    l.replace(
+      l.protocol + '//' + l.host + '/tarot-web/' +
+      '?p=' + l.pathname.replace('/tarot-web/', '').replace(/&/g, '~and~') +
+      (l.search ? '&q=' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+      l.hash
+    );
   </script>
 </head>
-<body>
-  <noscript>This page requires JavaScript.</noscript>
-</body>
+<body></body>
 </html>
