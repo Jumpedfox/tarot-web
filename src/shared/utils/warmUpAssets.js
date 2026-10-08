@@ -1,4 +1,5 @@
 import { ICONS } from "../../components/options/constants.js";
+import { prerenderCategoryGlows } from "../../components/oraclepage/categoryGlow.js";
 
 // Images that are not on screen at start but appear with an animation later
 // (the options menu icons). Loading and decoding them up front avoids a
@@ -25,5 +26,6 @@ export function warmUpAssets() {
   warmedUp = true;
   whenIdle(() => {
     DEFERRED_IMAGES.forEach(decodeImage);
+    prerenderCategoryGlows();
   });
 }

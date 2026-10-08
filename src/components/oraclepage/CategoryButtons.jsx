@@ -6,6 +6,14 @@ import {
   oracleSmallButtonStyles,
 } from "../../shared/styles/buttons.jsx";
 import {
+  colourField,
+  IMAGE_HALF,
+  REFERENCE_BUTTON_SIZE,
+  shapeBase,
+  shapeMask,
+} from "./categoryGlow.js";
+import { CATEGORY_SHAPES, LABEL_OFFSET } from "./categoryShapes.js";
+import {
   CATEGORIES,
   CATEGORY_GRADIENTS,
 } from "../../shared/constants/categories.ts";
@@ -29,6 +37,89 @@ const getCategoryPosition = (index, total, isSelected, isMobile) => {
     x: Math.cos(angle) * r,
     y: Math.sin(angle) * r,
   };
+};
+
+// A square layer of `half` px around the button's centre.
+const centredLayer = (half) => ({
+  position: "absolute",
+  left: "50%",
+  top: "50%",
+  width: half * 2,
+  height: half * 2,
+  marginLeft: -half,
+  marginTop: -half,
+  pointerEvents: "none",
+});
+
+const ROTATION = {
+  opacity: { duration: 1.5 },
+  rotate: { duration: 10, repeat: Infinity, ease: "linear" },
+};
+
+/**
+ * The shaped look of a category button (see categoryGlow.js): a static white
+ * glow in the button's shape, and the category gradient rotating under a
+ * blurred silhouette of the shape. Switching gradients cross-fades them.
+ */
+const ShapedGlow = ({ shape, gradient, size }) => {
+  const scale = size / REFERENCE_BUTTON_SIZE;
+  const base = shapeBase(shape);
+  const mask = shapeMask(shape);
+  const colour = colourField(gradient);
+
+  const colourStyle = colour
+    ? {
+        ...centredLayer(IMAGE_HALF.colour * scale),
+        backgroundImage: `url(${colour})`,
+        backgroundSize: "100% 100%",
+        willChange: "transform",
+      }
+    : {
+        // No canvas conic gradients: live CSS blur of a disc, as before.
+        ...centredLayer(size / 2 + 10),
+        borderRadius: "50%",
+        background: gradient,
+        filter: "blur(20px)",
+      };
+
+  const maskStyle = mask
+    ? {
+        ...centredLayer(IMAGE_HALF.mask * scale),
+        maskImage: `url(${mask})`,
+        WebkitMaskImage: `url(${mask})`,
+        maskSize: "100% 100%",
+        WebkitMaskSize: "100% 100%",
+      }
+    : { ...centredLayer(IMAGE_HALF.mask * scale) };
+
+  return (
+    <>
+      {base && (
+        <div
+          className="category-base"
+          style={{
+            ...centredLayer(IMAGE_HALF.base * scale),
+            zIndex: -2,
+            backgroundImage: `url(${base})`,
+            backgroundSize: "100% 100%",
+            transition: "transform 0.4s ease-in-out",
+          }}
+        />
+      )}
+      <div style={{ ...maskStyle, zIndex: -1 }}>
+        <AnimatePresence initial={false}>
+          <MotionDiv
+            key={gradient}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, rotate: 360 }}
+            exit={{ opacity: 0 }}
+            style={colourStyle}
+            transition={ROTATION}
+          />
+        </AnimatePresence>
+      </div>
+    </>
+  );
 };
 
 const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
@@ -100,6 +191,7 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
 
   const isSelected = selectedCategory !== null;
   const buttonStyles = isMobile ? oracleSmallButtonStyles : oracleButtonStyles;
+  const buttonSize = parseInt(buttonStyles.w, 10);
 
   return (
     <AnimatePresence>
@@ -181,6 +273,12 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
                   >
                     <MotionButton
                       {...buttonStyles}
+                      // The shape and glow are drawn by ShapedGlow.
+                      boxShadow="none"
+                      _hover={{
+                        color: "white",
+                        "& .category-base": { transform: "scale(1.08)" },
+                      }}
                       initial={{ scale: 0 }}
                       animate={{
                         scale: isRotating ? [1, 1.3, 1] : 1,
@@ -218,35 +316,22 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
                       }
                       zIndex="3"
                     >
-                      {/* Glow: a blurred, rotating conic-gradient disc. The blur
-                          sits on the rotating layer itself, so it is computed
-                          once and the GPU only rotates the result (blurring a
-                          parent of the rotating layer re-blurs every frame). */}
-                      <MotionDiv
-                        animate={{
-                          rotate: 360,
-                          background: currentGradient,
-                        }}
-                        style={{
-                          position: "absolute",
-                          inset: "-10px",
-                          borderRadius: "50%",
-                          zIndex: -1,
-                          filter: "blur(20px)",
-                          willChange: "transform",
-                        }}
-                        transition={{
-                          background: { duration: 1.5 },
-                          rotate: {
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: "linear",
-                          },
-                        }}
+                      <ShapedGlow
+                        shape={CATEGORY_SHAPES[category]}
+                        gradient={currentGradient}
+                        size={buttonSize}
                       />
 
                       {!isSelected && (
-                        <Box position="relative" zIndex="1" whiteSpace="nowrap">
+                        <Box
+                          position="relative"
+                          zIndex="1"
+                          whiteSpace="nowrap"
+                          transform={`translateY(${
+                            (LABEL_OFFSET[CATEGORY_SHAPES[category]] || 0) *
+                            (buttonSize / 2)
+                          }px)`}
+                        >
                           {category}
                         </Box>
                       )}
