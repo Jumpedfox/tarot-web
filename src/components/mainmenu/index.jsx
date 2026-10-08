@@ -84,14 +84,14 @@ const Mainmenu = () => {
             onClick={toggleManualVisibility}
           >
             {" "}
-            GUidE
+            mAnUaL
           </Button>
 
           <Button
             {...(isMobile ? oracleSmallButtonStyles : smallButtonStyles)}
             onClick={handleGalleryClick}
           >
-            GAlleY
+            GAlleRY
           </Button>
         </HStack>
       </VStack>

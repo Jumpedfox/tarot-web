@@ -86,7 +86,7 @@ const Manual = () => {
               </Box>{" "}
               and <Glow color="black">dark</Glow> themes.
             </Text>
-            <Text mt="20px" textShadow={glowShadow} color="rgb(0,0,0)">
+            <Text mt="20px" textShadow={glowShadow} color="rgb(0, 0, 0)">
               The full deck is still taking shape. For now, only the Major
               Arcana pictures are available.
             </Text>
@@ -106,7 +106,7 @@ const Manual = () => {
             }}
             onClick={() => dispatch(setManualIsVisible(false))}
           >
-            <Text py="10px">Let's do some magic</Text>
+            Let's do some magic
           </Button>
         </VStack>
       </MotionBox>

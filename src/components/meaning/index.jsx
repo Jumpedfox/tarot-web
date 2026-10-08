@@ -10,7 +10,7 @@ const MotionFlex = motion(Flex);
 const MotionBox = motion(Box);
 
 const Meaning = ({ rotate1, rotate2, rotate3, showAiView }) => {
-  const { numberOfCards, cards, selectedCategory, aiReading } = useSelector(
+  const { numberOfCards, cards, selectedCategory, aiReading, aiQuestion } = useSelector(
     (state) => state.cards,
   );
 
@@ -119,6 +119,17 @@ const Meaning = ({ rotate1, rotate2, rotate3, showAiView }) => {
                 maxW="700px"
                 textAlign="center"
               >
+                {aiQuestion && (
+                  <Text
+                    mb="20px"
+                    fontSize={{ base: "14px", md: "16px" }}
+                    fontStyle="italic"
+                    color="#4fc3f7"
+                    opacity={0.85}
+                  >
+                    “{aiQuestion}”
+                  </Text>
+                )}
                 <Text
                   fontWeight="black"
                   fontSize={{ base: "15px", md: "18px" }}

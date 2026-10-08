@@ -11,6 +11,7 @@ const BackgroundMusic = () => {
       playing={!musicIsMuted}
       loop
       volume={musicVolume}
+      html5={true}
     />
   );
 };

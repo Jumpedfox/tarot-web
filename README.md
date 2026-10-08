@@ -9,10 +9,10 @@ A single-page tarot reading app with an animated cosmic background, card animati
 - Draw one card or a three-card spread, from the full deck (78 cards) or Major Arcana only
 - Pick a question category (General, Love, Health, Work, Finance, Personal)
 - Upright and reversed meanings for every card
-- AI reading of the whole spread, generated with Llama 3.3 via the Groq API
+- AI reading of the whole spread via the Groq API, optionally answering your own question to the cards
 - Gallery of all cards with a detail view
 - Ambient soundtrack with a volume knob, bright and dark themes (settings are persisted)
-- Animated canvas background (black hole, star stream and gas clouds), tuned to stay light on the main thread
+- Animated canvas scene: a star stream falling into the black hole that opens the menu, tuned to stay light on the main thread
 
 ## Tech stack
 
@@ -20,7 +20,7 @@ A single-page tarot reading app with an animated cosmic background, card animati
 - Redux Toolkit + redux-persist
 - Chakra UI v3, Framer Motion, Sass
 - Firebase Realtime Database (card data)
-- Groq API (AI readings)
+- Groq API behind a Cloudflare Worker (AI readings)
 - Howler.js (audio)
 - Create React App, deployed to GitHub Pages
 
@@ -32,19 +32,16 @@ Requirements: Node.js 18+ and npm.
 git clone https://github.com/Jumpedfox/tarot-web.git
 cd tarot-web
 npm install
-cp .env.example .env.local   # then fill in the values
 npm start
 ```
 
 The app runs at http://localhost:3000.
 
-### Environment variables
+### AI readings
 
-| Variable | Purpose |
-| --- | --- |
-| `REACT_APP_GROQ_API_KEY` | Key for the Groq API, used by the AI reading |
+The site never holds the Groq key. Readings go through the Cloudflare Worker in [`worker/`](worker/README.md), which keeps the key as a secret, builds the prompt and only accepts requests from the site.
 
-> **Note:** every `REACT_APP_*` variable is inlined into the public JavaScript bundle at build time. A key set this way is visible to anyone who opens the site. For a real deployment, call Groq through a small server-side proxy (for example a Cloudflare Worker or a Firebase Function) that holds the key.
+By default the app calls `https://groqkey.sosobaka.workers.dev`. To use another worker, set `REACT_APP_READING_API_URL` in `.env.local` (see `.env.example`).
 
 ## Scripts
 
@@ -60,9 +57,9 @@ The app runs at http://localhost:3000.
 ```
 src/
   components/
-    cosmicbackground/  animated canvas background (engine.js + React wrapper)
+    cosmos/            canvas scenes: star stream background, black hole menu button
     oraclepage/        card drawing flow, categories, AI reading button
-    meaning/           card meanings and AI reading view
+    meaning/           card meanings, question dialog and AI reading view
     gallery/           all cards with a detail modal
     card/              single card with position and flip animations
     options/           settings panel: volume, theme, number of cards
@@ -70,6 +67,7 @@ src/
   redux/               store and slices (cards, sound, theme, ui)
   services/            Firebase data access
   shared/              constants, styles, utils
+worker/                Cloudflare Worker for AI readings
 ```
 
 ## Deployment

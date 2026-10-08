@@ -2,13 +2,14 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setAiReading,
+  setAiQuestion,
   setMeaningVisiblility,
   setSelectedCategory,
   resetCards as resetCardsAction,
 } from "../../../redux/slices/cardsSlice.ts";
 import { useThrottledAction } from "./useThrottledAction.js";
 import { useCardGeneration } from "./useCardGeneration.js";
-import { useGroqReading } from "../../meaning/hooks/useGroqReading.js";
+import { useAiReading } from "../../meaning/hooks/useAiReading.js";
 import { getButtonConfig } from "../utils.js";
 
 export const useOraclepage = () => {
@@ -27,6 +28,7 @@ export const useOraclepage = () => {
   const [cardsHaveBeenShown, setCardsHaveBeenShown] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showAiView, setShowAiView] = useState(false);
+  const [questionDialogOpen, setQuestionDialogOpen] = useState(false);
   const isMountedRef = useRef(true);
   const throttledAction = useThrottledAction(2000);
 
@@ -37,15 +39,17 @@ export const useOraclepage = () => {
     setShowCategories,
   );
 
-  const { reading, isLoading: isLoadingReading, getReading } = useGroqReading();
+  const { reading, isLoading: isLoadingReading, getReading } = useAiReading();
 
   const resetCards = useCallback(() => {
     dispatch(resetCardsAction());
     dispatch(setMeaningVisiblility(false));
     dispatch(setSelectedCategory("General"));
     dispatch(setAiReading(null));
+    dispatch(setAiQuestion(null));
 
     setShowAiView(false);
+    setQuestionDialogOpen(false);
     setTwists({ 1: 0, 2: 0, 3: 0 });
     setRotations({ 1: 0, 2: 0, 3: 0 });
     setActiveCard(3);
@@ -62,15 +66,21 @@ export const useOraclepage = () => {
     };
   }, [resetCards, cancelGeneration]);
 
-  const handleGetReading = () => {
-    getReading({
+  const openQuestionDialog = () => setQuestionDialogOpen(true);
+  const closeQuestionDialog = () => setQuestionDialogOpen(false);
+
+  const handleAskQuestion = async (question) => {
+    setQuestionDialogOpen(false);
+    await getReading({
       cards: [
         { card: card1, rotation: rotations[1] },
         { card: card2, rotation: rotations[2] },
         { card: card3, rotation: rotations[3] },
       ],
       category: selectedCategory,
+      question,
     });
+    if (isMountedRef.current) setShowAiView(true);
   };
 
   const handleCardClick = (num) => {
@@ -118,9 +128,12 @@ export const useOraclepage = () => {
     setShowAiView,
     reading,
     isLoadingReading,
+    questionDialogOpen,
+    openQuestionDialog,
+    closeQuestionDialog,
+    handleAskQuestion,
     buttonConfig,
     resetCards,
-    handleGetReading,
     handleCardClick,
     handleCategoryClick,
   };

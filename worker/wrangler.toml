@@ -1,0 +1,16 @@
+name = "groqkey"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+
+[vars]
+# Sites allowed to call the worker from a browser.
+ALLOWED_ORIGINS = "https://jumpedfox.github.io,http://localhost:3000"
+
+# 10 readings per minute per IP, so nobody burns through the Groq quota.
+[[ratelimits]]
+name = "READING_LIMITER"
+namespace_id = "1001"
+simple = { limit = 10, period = 60 }
+
+# The Groq key is a secret, never put it in this file:
+#   npx wrangler secret put GROQ_API_KEY

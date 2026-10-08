@@ -11,7 +11,7 @@ import Loader from "./components/loader/index.jsx";
 import BackgroundMusic from "./components/music/index.jsx";
 import Gallery from "./components/gallery/index.jsx";
 import Manual from "./components/manual/index.jsx";
-import CosmicBackground from "./components/cosmicbackground/index.jsx";
+import CosmicBackground from "./components/cosmos/CosmicBackground.jsx";
 
 function App() {
   const manualIsVisible = useSelector((state) => state.ui.manualIsVisible);
@@ -22,7 +22,7 @@ function App() {
     theme === "bright" ? "brightness(1.3)" : "brightness(0.5)";
 
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <CosmicBackground filter={themeFilter} />
       <Flex
         textAlign="center"
