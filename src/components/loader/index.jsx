@@ -3,9 +3,6 @@ import { useDispatch } from "react-redux";
 import { Box, Image, Spinner } from "@chakra-ui/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { setLoaderIsVisible } from "../../redux/slices/uiSlice.ts";
-import bgPic from "../../images/bg2.jpg";
-import bgPic2 from "../../images/stars.png";
-import bgPic3 from "../../images/stars2.png";
 
 const MotionBox = motion(Box);
 const FADE_DURATION = 2000;
@@ -17,19 +14,7 @@ const Loader = () => {
   const timeoutRef = useRef(null);
 
   useEffect(() => {
-    const checkImages = Promise.all(
-      [bgPic, bgPic2, bgPic3].map(
-        (src) =>
-          new Promise((resolve) => {
-            const img = new window.Image();
-            img.onload = resolve;
-            img.onerror = resolve;
-            img.src = src;
-          }),
-      ),
-    );
-
-    Promise.all([document.fonts.ready, checkImages]).then(() => {
+    document.fonts.ready.then(() => {
       setShowEye(true);
     });
   }, []);

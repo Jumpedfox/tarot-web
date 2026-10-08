@@ -43,9 +43,17 @@ Do not describe each card separately. Instead, read all the cards together in th
         }),
       });
 
+      if (!response.ok) {
+        throw new Error(`Groq API responded with ${response.status}`);
+      }
+
       const data = await response.json();
-      dispatch(setAiReading(data.choices[0].message.content));
+      const content = data?.choices?.[0]?.message?.content;
+      if (!content) throw new Error("Empty response from Groq API");
+
+      dispatch(setAiReading(content));
     } catch (err) {
+      console.error("AI reading failed:", err);
       dispatch(setAiReading("The stars are silent. Try another time."));
     } finally {
       setIsLoading(false);
