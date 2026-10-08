@@ -27,9 +27,6 @@ export const useOraclepage = () => {
   const [cardsHaveBeenShown, setCardsHaveBeenShown] = useState(false);
   const [showCategories, setShowCategories] = useState(false);
   const [showAiView, setShowAiView] = useState(false);
-  useEffect(() => {
-    console.log("showCategories changed:", showCategories);
-  }, [showCategories]);
   const isMountedRef = useRef(true);
   const throttledAction = useThrottledAction(2000);
 

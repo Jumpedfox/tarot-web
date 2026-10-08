@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from "react";
-import { throttle } from "lodash";
+import throttle from "lodash/throttle";
 
 export const useThrottledAction = (delay = 1000) => {
   const throttledAction = useMemo(
