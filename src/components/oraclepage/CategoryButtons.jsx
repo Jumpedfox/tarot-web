@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  animate,
+  useMotionValue,
+} from "framer-motion";
 import { Button, Box, useBreakpointValue, Flex } from "@chakra-ui/react";
 import {
   oracleButtonStyles,
@@ -36,6 +41,7 @@ const getCategoryPosition = (index, total, isSelected, isMobile) => {
   return {
     x: Math.cos(angle) * r,
     y: Math.sin(angle) * r,
+    angleDeg: (angle * 180) / Math.PI,
   };
 };
 
@@ -51,18 +57,30 @@ const centredLayer = (half) => ({
   pointerEvents: "none",
 });
 
-const ROTATION = {
-  opacity: { duration: 1.5 },
-  rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-};
+// Fade time when a button changes shape or colour (on selecting a category).
+const MORPH_SECONDS = 1.5;
 
 /**
  * The shaped look of a category button (see categoryGlow.js): a static white
  * glow in the button's shape, and the category gradient rotating under a
- * blurred silhouette of the shape. Switching gradients cross-fades them.
+ * blurred silhouette of the shape.
+ *
+ * Changing the shape or the gradient cross-fades the old look into the new
+ * one; both share one rotation, so the colours line up while they blend.
  */
 const ShapedGlow = ({ shape, gradient, size }) => {
   const scale = size / REFERENCE_BUTTON_SIZE;
+  const rotate = useMotionValue(0);
+
+  useEffect(() => {
+    const controls = animate(rotate, 360, {
+      duration: 10,
+      repeat: Infinity,
+      ease: "linear",
+    });
+    return () => controls.stop();
+  }, [rotate]);
+
   const base = shapeBase(shape);
   const mask = shapeMask(shape);
   const colour = colourField(gradient);
@@ -73,6 +91,7 @@ const ShapedGlow = ({ shape, gradient, size }) => {
         backgroundImage: `url(${colour})`,
         backgroundSize: "100% 100%",
         willChange: "transform",
+        rotate,
       }
     : {
         // No canvas conic gradients: live CSS blur of a disc, as before.
@@ -80,6 +99,7 @@ const ShapedGlow = ({ shape, gradient, size }) => {
         borderRadius: "50%",
         background: gradient,
         filter: "blur(20px)",
+        rotate,
       };
 
   const maskStyle = mask
@@ -93,32 +113,40 @@ const ShapedGlow = ({ shape, gradient, size }) => {
     : { ...centredLayer(IMAGE_HALF.mask * scale) };
 
   return (
-    <>
-      {base && (
-        <div
-          className="category-base"
-          style={{
-            ...centredLayer(IMAGE_HALF.base * scale),
-            zIndex: -2,
-            backgroundImage: `url(${base})`,
-            backgroundSize: "100% 100%",
-            transition: "transform 0.4s ease-in-out",
-          }}
-        />
-      )}
-      <div style={{ ...maskStyle, zIndex: -1 }}>
-        <AnimatePresence initial={false}>
-          <MotionDiv
-            key={gradient}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, rotate: 360 }}
-            exit={{ opacity: 0 }}
-            style={colourStyle}
-            transition={ROTATION}
+    <AnimatePresence initial={false}>
+      <MotionDiv
+        key={shape}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: MORPH_SECONDS, ease: "easeInOut" }}
+        style={{ position: "absolute", inset: 0, zIndex: -1, pointerEvents: "none" }}
+      >
+        {base && (
+          <div
+            className="category-base"
+            style={{
+              ...centredLayer(IMAGE_HALF.base * scale),
+              backgroundImage: `url(${base})`,
+              backgroundSize: "100% 100%",
+              transition: "transform 0.4s ease-in-out",
+            }}
           />
-        </AnimatePresence>
-      </div>
-    </>
+        )}
+        <div style={maskStyle}>
+          <AnimatePresence initial={false}>
+            <MotionDiv
+              key={gradient}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: MORPH_SECONDS }}
+              style={colourStyle}
+            />
+          </AnimatePresence>
+        </div>
+      </MotionDiv>
+    </AnimatePresence>
   );
 };
 
@@ -251,6 +279,16 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
               const currentGradient = isSelected
                 ? CATEGORY_GRADIENTS[selectedCategory]
                 : CATEGORY_GRADIENTS[category];
+              const currentShape = isSelected
+                ? CATEGORY_SHAPES[selectedCategory]
+                : CATEGORY_SHAPES[category];
+              // Once a category is picked, every button turns its tip (its
+              // "down") to the centre; the circle then rotates as a whole, so
+              // the tips keep pointing inwards.
+              // Normalised to -180..180 so each button turns the short way.
+              const facing = isSelected
+                ? ((((pos.angleDeg + 90 + 180) % 360) + 360) % 360) - 180
+                : 0;
 
               return (
                 <MotionDiv
@@ -282,8 +320,10 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
                       initial={{ scale: 0 }}
                       animate={{
                         scale: isRotating ? [1, 1.3, 1] : 1,
+                        rotate: facing,
                       }}
                       transition={{
+                        rotate: { duration: MORPH_SECONDS, ease: "easeInOut" },
                         scale: isRotating
                           ? {
                               duration: 2.4,
@@ -317,7 +357,7 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
                       zIndex="3"
                     >
                       <ShapedGlow
-                        shape={CATEGORY_SHAPES[category]}
+                        shape={currentShape}
                         gradient={currentGradient}
                         size={buttonSize}
                       />
