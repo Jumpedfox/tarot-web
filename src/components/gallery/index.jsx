@@ -11,12 +11,18 @@ import { cardsService } from "../../services/cards.service.ts";
 import { preloadImage } from "../../shared/utils/preloadImage.ts";
 
 const MotionBox = motion(Box);
-const SKELETON_COUNT = Math.floor(Math.ceil(window.innerHeight / 160) * 3);
 
 const Gallery = () => {
   const navigate = useNavigate();
+
+  const [items, setItems] = useState(
+    Array.from({ length: MAX_CARDS }).map((_, i) => ({
+      id: `placeholder-${i}`,
+      card: null,
+    })),
+  );
+
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   const {
     selectedCard,
@@ -28,116 +34,90 @@ const Gallery = () => {
   } = useCardNavigation(cards);
 
   useEffect(() => {
-    const fetchAllCards = async () => {
-      setLoading(true);
+    const fetchCards = async () => {
       const results = await cardsService.getAllCards(MAX_CARDS);
       await Promise.all(results.map((card) => preloadImage(card.image)));
       setCards(results);
-      setLoading(false);
+      for (let i = 0; i < results.length; i++) {
+        await new Promise((res) => setTimeout(res, 100));
+
+        setItems((prev) => {
+          const copy = [...prev];
+          copy[i] = {
+            id: results[i].id,
+            card: results[i],
+          };
+          return copy;
+        });
+      }
     };
 
-    fetchAllCards();
+    fetchCards();
   }, []);
 
   return (
     <MotionBox minH="100dvh" w="100%" maxW="1400px" mx="auto" pt="20px">
-      <Flex justifyContent="center" textAlign="center">
+      <Flex justifyContent="center" alignItems="center">
         <Button
+          mr="16px"
           ml="20px"
-          mt="3px"
           fontSize="40px"
           color="white"
           onClick={() => navigate("/")}
-          variant="ghost"
+          variant="plain"
           w="30px"
         >
           ᐊ
         </Button>
-        <Text
-          fontSize="3xl"
-          fontWeight="bold"
-          lineHeight={{ base: "1", md: "1.5" }}
-          color="white"
-          mr="70px"
-        >
+
+        <Text fontSize={{ base: "xl", md: "3xl" }} fontWeight="bold" mr="70px">
           Tarot Cards Gallery
         </Text>
       </Flex>
 
-      <AnimatePresence mode="popLayout">
-        {loading && (
-          <MotionBox
-            key="loading"
+      <ScrollArea.Root maxH="80dvh" w="100%">
+        <ScrollArea.Viewport css={SCROLL_MASK_STYLES}>
+          <Box
             display="grid"
             gridTemplateColumns={{
               base: "repeat(3, 1fr)",
               md: "repeat(auto-fill, minmax(300px, 1fr))",
             }}
-            maxH="80dvh"
             gap={4}
-            w="100%"
             p="40px 20px"
-            css={SCROLL_MASK_STYLES}
           >
-            {Array.from({ length: SKELETON_COUNT }, (_, index) => (
-              <MotionBox
-                key={index}
-                initial={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-              >
-                <GalleryCardSkeleton />
-              </MotionBox>
-            ))}
-          </MotionBox>
-        )}
-
-        {!loading && cards.length === 0 && (
-          <MotionBox
-            key="empty"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Text textAlign="center" fontSize="xl" color="white">
-              The cards are unavailable at this time. Please try again later.
-            </Text>
-          </MotionBox>
-        )}
-
-        {!loading && cards.length > 0 && (
-          <MotionBox key="cards">
-            <ScrollArea.Root maxH="80dvh" w="100%">
-              <ScrollArea.Viewport css={SCROLL_MASK_STYLES}>
-                <Box
-                  display="grid"
-                  gridTemplateColumns={{
-                    base: "repeat(3, 1fr)",
-                    md: "repeat(auto-fill, minmax(300px, 1fr))",
-                  }}
-                  gap={4}
-                  p="40px 20px"
-                >
-                  {cards.map((card, index) => (
-                    <MotionBox
-                      key={card.id}
+            {items.map((item, index) => (
+              <Box key={item.id} position="relative">
+                <AnimatePresence mode="wait">
+                  {!item.card ? (
+                    <motion.div
+                      key="skeleton"
+                      initial={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 1 }}
+                    >
+                      <GalleryCardSkeleton />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="card"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ duration: 1.5, delay: index * 0.1 }}
+                      transition={{ duration: 0.3 }}
                     >
                       <GalleryCardItem
-                        card={card}
+                        card={item.card}
                         index={index}
                         onClick={handleCardClick}
                       />
-                    </MotionBox>
-                  ))}
-                </Box>
-              </ScrollArea.Viewport>
-            </ScrollArea.Root>
-          </MotionBox>
-        )}
-      </AnimatePresence>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </Box>
+            ))}
+          </Box>
+        </ScrollArea.Viewport>
+      </ScrollArea.Root>
 
       <AnimatePresence initial={false} custom={direction}>
         {selectedCard && (

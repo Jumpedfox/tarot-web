@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Flex } from "@chakra-ui/react";
@@ -11,7 +12,8 @@ import Loader from "./components/loader/index.jsx";
 import BackgroundMusic from "./components/music/index.jsx";
 import Gallery from "./components/gallery/index.jsx";
 import Manual from "./components/manual/index.jsx";
-import CosmicBackground from "./components/cosmicbackground/index.jsx";
+import CosmicBackground from "./components/cosmos/CosmicBackground.jsx";
+import { warmUpAssets } from "./shared/utils/warmUpAssets.js";
 
 function App() {
   const manualIsVisible = useSelector((state) => state.ui.manualIsVisible);
@@ -21,9 +23,14 @@ function App() {
   const themeFilter =
     theme === "bright" ? "brightness(1.3)" : "brightness(0.5)";
 
+  // Once the start screen is up, quietly load what later animations need.
+  useEffect(() => {
+    if (!loaderIsVisible) warmUpAssets();
+  }, [loaderIsVisible]);
+
   return (
-    <BrowserRouter>
-      <CosmicBackground filter={themeFilter} />
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <CosmicBackground calm={optionsAreVisible} filter={themeFilter} />
       <Flex
         textAlign="center"
         w="full"

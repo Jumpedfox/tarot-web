@@ -28,6 +28,7 @@ const preloadedState = {
     meaningIsVisible: false,
     selectedCategory: "General",
     aiReading: null,
+    aiQuestion: null,
   },
 } as any;
 

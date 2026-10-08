@@ -6,6 +6,17 @@ import { setLoaderIsVisible } from "../../redux/slices/uiSlice.ts";
 
 const MotionBox = motion(Box);
 const FADE_DURATION = 2000;
+const EYE_ICON =
+  "https://pub-1f93d9e198104bc5996a475ce6959416.r2.dev/icons/iconeye.png";
+
+// Resolves once an image is downloaded and decoded (or failed to load).
+const loadImage = (src) =>
+  new Promise((resolve) => {
+    const img = new window.Image();
+    img.onload = resolve;
+    img.onerror = resolve;
+    img.src = src;
+  });
 
 const Loader = () => {
   const dispatch = useDispatch();
@@ -14,11 +25,13 @@ const Loader = () => {
   const timeoutRef = useRef(null);
 
   useEffect(() => {
-    document.fonts.ready.then(() => {
+    Promise.all([document.fonts.ready, loadImage(EYE_ICON)]).then(() => {
       setShowEye(true);
     });
   }, []);
 
+  // The click on the eye is also the user gesture browsers require before a
+  // page may play sound, so the music starts with it.
   const handleClick = () => {
     if (!showEye) return;
     setFadeout(true);
@@ -71,6 +84,7 @@ const Loader = () => {
           <MotionBox
             key="eye"
             as="button"
+            aria-label="Enter"
             onClick={handleClick}
             w="150px"
             h="150px"
@@ -91,7 +105,7 @@ const Loader = () => {
             whileTap={{ scale: 0.9 }}
           >
             <Image
-              src="https://pub-1f93d9e198104bc5996a475ce6959416.r2.dev/icons/iconeye.png"
+              src={EYE_ICON}
               alt="Eye Icon"
               w="100%"
               h="100%"

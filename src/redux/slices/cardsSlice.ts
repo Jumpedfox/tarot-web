@@ -8,6 +8,7 @@ interface CardsState {
   meaningIsVisible: boolean;
   selectedCategory: string;
   aiReading: string | null;
+  aiQuestion: string | null;
 }
 
 const initialState: CardsState = {
@@ -17,6 +18,7 @@ const initialState: CardsState = {
   meaningIsVisible: false,
   selectedCategory: "General",
   aiReading: null,
+  aiQuestion: null,
 };
 
 const cardsSlice = createSlice({
@@ -47,6 +49,9 @@ const cardsSlice = createSlice({
     setAiReading: (state, action: PayloadAction<string | null>) => {
       state.aiReading = action.payload;
     },
+    setAiQuestion: (state, action: PayloadAction<string | null>) => {
+      state.aiQuestion = action.payload;
+    },
   },
 });
 
@@ -58,5 +63,6 @@ export const {
   setMeaningVisiblility,
   setSelectedCategory,
   setAiReading,
+  setAiQuestion,
 } = cardsSlice.actions;
 export default cardsSlice.reducer;

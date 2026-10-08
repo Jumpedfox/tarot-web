@@ -1,9 +1,10 @@
 import { Box, useBreakpointValue } from "@chakra-ui/react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useDispatch, useSelector } from "react-redux";
-import spiral from "../../images/spiral2.png";
 import { useEffect, useRef } from "react";
 import { setOptionsVisibility } from "../../redux/slices/uiSlice.ts";
+import BlackHole from "../cosmos/BlackHole.jsx";
+import { MENU_BUTTON } from "../cosmos/geometry.js";
 
 const MotionBox = motion(Box);
 
@@ -19,6 +20,7 @@ const OptionsButton = () => {
 
   const theme = useSelector((state) => state.theme.themeName);
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const { size, bottom } = isMobile ? MENU_BUTTON.mobile : MENU_BUTTON.desktop;
 
   return (
     <AnimatePresence>
@@ -26,11 +28,15 @@ const OptionsButton = () => {
         <MotionBox
           key="options-button"
           as="button"
+          aria-label="Open menu"
           position="absolute"
           left="50%"
-          bottom={isMobile ? "-40px" : "-100px"}
-          w={isMobile ? "120px" : "250px"}
-          h={isMobile ? "120px" : "250px"}
+          bottom={`${bottom}px`}
+          w={`${size}px`}
+          h={`${size}px`}
+          p="0"
+          bg="transparent"
+          borderRadius="full"
           border="none"
           outline="none"
           cursor="pointer"
@@ -42,7 +48,7 @@ const OptionsButton = () => {
           }
           animate={{
             x: "-50%",
-            y: 20,
+            y: MENU_BUTTON.restY,
             opacity: 1,
             scale: 1,
             transition: { duration: 1.5 },
@@ -56,18 +62,15 @@ const OptionsButton = () => {
           }}
           onClick={() => dispatch(setOptionsVisibility(true))}
         >
-          <MotionBox
-            w="100%"
-            h="100%"
-            bgImage={`url(${spiral})`}
-            bgSize="contain"
-            bgRepeat="no-repeat"
-            bgPos="center"
+          <Box
+            position="absolute"
+            inset="0"
             opacity="0.9"
             filter={theme === "bright" ? "none" : "brightness(0.7)"}
-            animate={{ rotate: 360 }}
-            transition={{ repeat: Infinity, duration: 60, ease: "linear" }}
-          />
+            transition="filter 3s"
+          >
+            <BlackHole size={size} />
+          </Box>
         </MotionBox>
       )}
     </AnimatePresence>

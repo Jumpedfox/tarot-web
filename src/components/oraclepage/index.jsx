@@ -5,6 +5,7 @@ import { useOraclepage } from "./hooks/useOraclepage.js";
 import CardsList from "./CardsList.jsx";
 import ControlButtons from "./ControlButtons.jsx";
 import Meaning from "../meaning/index.jsx";
+import QuestionDialog from "../meaning/QuestionDialog.jsx";
 
 const MotionBox = motion(Box);
 
@@ -27,9 +28,12 @@ const Oraclepage = () => {
     setShowAiView,
     reading,
     isLoadingReading,
+    questionDialogOpen,
+    openQuestionDialog,
+    closeQuestionDialog,
+    handleAskQuestion,
     buttonConfig,
     resetCards,
-    handleGetReading,
     handleCardClick,
     handleCategoryClick,
   } = useOraclepage();
@@ -96,11 +100,17 @@ const Oraclepage = () => {
           setShowCategories={setShowCategories}
           reading={reading}
           isLoadingReading={isLoadingReading}
-          onGetReading={handleGetReading}
+          onGetReading={openQuestionDialog}
           showAiView={showAiView}
           setShowAiView={setShowAiView}
         />
       </Box>
+
+      <QuestionDialog
+        open={questionDialogOpen}
+        onClose={closeQuestionDialog}
+        onSubmit={handleAskQuestion}
+      />
     </MotionBox>
   );
 };
