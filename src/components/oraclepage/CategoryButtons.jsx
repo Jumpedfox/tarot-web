@@ -218,36 +218,32 @@ const CategoryButtons = ({ onCategoryClick, setShowCategories }) => {
                       }
                       zIndex="3"
                     >
-                      <Box
-                        position="absolute"
-                        inset="-10px"
-                        borderRadius="50%"
-                        zIndex="-1"
-                        overflow="hidden"
-                        filter="blur(20px)"
-                      >
-                        <MotionDiv
-                          animate={{
-                            rotate: 360,
-                            background: currentGradient,
-                          }}
-                          style={{
-                            position: "absolute",
-                            top: "-50%",
-                            left: "-50%",
-                            width: "200%",
-                            height: "200%",
-                          }}
-                          transition={{
-                            background: { duration: 1.5 },
-                            rotate: {
-                              duration: 10,
-                              repeat: Infinity,
-                              ease: "linear",
-                            },
-                          }}
-                        />
-                      </Box>
+                      {/* Glow: a blurred, rotating conic-gradient disc. The blur
+                          sits on the rotating layer itself, so it is computed
+                          once and the GPU only rotates the result (blurring a
+                          parent of the rotating layer re-blurs every frame). */}
+                      <MotionDiv
+                        animate={{
+                          rotate: 360,
+                          background: currentGradient,
+                        }}
+                        style={{
+                          position: "absolute",
+                          inset: "-10px",
+                          borderRadius: "50%",
+                          zIndex: -1,
+                          filter: "blur(20px)",
+                          willChange: "transform",
+                        }}
+                        transition={{
+                          background: { duration: 1.5 },
+                          rotate: {
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: "linear",
+                          },
+                        }}
+                      />
 
                       {!isSelected && (
                         <Box position="relative" zIndex="1" whiteSpace="nowrap">

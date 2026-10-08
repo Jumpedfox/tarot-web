@@ -5,11 +5,12 @@ import { menuHoleCenter } from "./geometry.js";
 /**
  * Full-screen star stream falling into the black hole menu button.
  *
- * Rendered as a fixed canvas behind the app. `paused` stops the animation
- * loop; `filter` is applied with CSS so the theme brightness can transition
- * without re-rendering the scene.
+ * Rendered as a fixed canvas behind the app. `calm` slows the stream down to
+ * a standstill (used while the menu is open, when the black hole is gone);
+ * `filter` is applied with CSS so the theme brightness can transition without
+ * re-rendering the scene.
  */
-const CosmicBackground = ({ paused = false, filter = "none" }) => {
+const CosmicBackground = ({ calm = false, filter = "none" }) => {
   const canvasRef = useRef(null);
   const sceneRef = useRef(null);
 
@@ -26,12 +27,8 @@ const CosmicBackground = ({ paused = false, filter = "none" }) => {
   }, []);
 
   useEffect(() => {
-    const scene = sceneRef.current;
-    if (!scene) return;
-
-    if (paused) scene.stop();
-    else scene.start();
-  }, [paused]);
+    sceneRef.current?.setCalm(calm);
+  }, [calm]);
 
   return (
     <canvas

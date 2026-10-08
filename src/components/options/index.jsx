@@ -60,15 +60,12 @@ const Options = () => {
       w="full"
       h="full"
       zIndex={10}
-      initial={{ backdropFilter: "blur(0px) brightness(1)" }}
-      animate={{
-        backdropFilter: "blur(2px) brightness(0.8)",
-        transition: { duration: 2 },
-      }}
-      exit={{
-        backdropFilter: "blur(0px) brightness(1)",
-        transition: { duration: 0.5 },
-      }}
+      // The blur itself is constant; only the overlay's opacity is animated.
+      // Animating the blur radius forces a full-screen re-blur every frame.
+      backdropFilter="blur(2px) brightness(0.8)"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1, transition: { duration: 2 } }}
+      exit={{ opacity: 0, transition: { duration: 0.5 } }}
     >
       <MotionBox
         initial={{ opacity: 0, y: 200, scale: 0.5 }}

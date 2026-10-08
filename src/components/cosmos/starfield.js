@@ -28,6 +28,11 @@ export function createStarfield(canvas, { count = 700, getTarget, ...loopOptions
   let fadeStart = 0;
   let fadeEnd = 0;
 
+  // 1 = full stream, 0 = stars hang still. Eased towards flowTarget so the
+  // stream slows down and speeds up smoothly (e.g. while the menu is open).
+  let flow = 1;
+  let flowTarget = 1;
+
   const stars = [];
   const sx = new Float32Array(count);
   const sy = new Float32Array(count);
@@ -78,10 +83,16 @@ export function createStarfield(canvas, { count = 700, getTarget, ...loopOptions
     }
   }
 
+  // ~1 s to settle at 60 fps.
+  const FLOW_EASING = 0.06;
+
   function step(k) {
+    flow += (flowTarget - flow) * (1 - Math.pow(1 - FLOW_EASING, k));
+    if (Math.abs(flowTarget - flow) < 0.005) flow = flowTarget;
+
     for (const star of stars) {
       const progress = 1 - star.distance / maxDistance;
-      const speed = 0.035 + progress * progress * progress * 0.22;
+      const speed = (0.035 + progress * progress * progress * 0.22) * flow;
       star.distance -= speed * k;
       if (star.distance < fadeEnd) resetStar(star, false);
     }
@@ -106,7 +117,9 @@ export function createStarfield(canvas, { count = 700, getTarget, ...loopOptions
       const alpha = star.brightness * pulse * Math.max(0, Math.min(1, fade));
       alphaIdx[i] = Math.round(alpha * ALPHA_LEVELS);
 
-      const trail = star.elongation * (1 + (1 - d / maxDistance) * 4);
+      // Trails shrink to dots as the stream stops.
+      const trail =
+        star.elongation * (1 + (1 - d / maxDistance) * 4) * (0.25 + 0.75 * flow);
       sx[i] = cx + star.cos * d;
       sy[i] = cy + star.sin * d;
       stx[i] = cx + star.cos * (d + trail);
@@ -175,9 +188,20 @@ export function createStarfield(canvas, { count = 700, getTarget, ...loopOptions
     onFrame(k, time) {
       if (k) step(k);
       draw(time);
+      // Fully stopped: nothing changes any more, so stop rendering too.
+      // This also keeps blurred overlays on top of the canvas cheap.
+      if (flowTarget === 0 && flow === 0) loop.stop();
     },
   });
 
   loop.resize();
-  return loop;
+
+  return {
+    ...loop,
+    // calm = true: slow the stream down to a standstill, then pause.
+    setCalm(calm) {
+      flowTarget = calm ? 0 : 1;
+      loop.start();
+    },
+  };
 }
