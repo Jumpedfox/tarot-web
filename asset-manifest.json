@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/tarot-web/static/css/main.5021c1c4.css",
-    "main.js": "/tarot-web/static/js/main.eb35142a.js",
+    "main.js": "/tarot-web/static/js/main.04770266.js",
     "static/media/CinzelDecorative.ttf": "/tarot-web/static/media/CinzelDecorative.c243877d82654b511c69.ttf",
     "index.html": "/tarot-web/index.html",
     "main.5021c1c4.css.map": "/tarot-web/static/css/main.5021c1c4.css.map",
-    "main.eb35142a.js.map": "/tarot-web/static/js/main.eb35142a.js.map"
+    "main.04770266.js.map": "/tarot-web/static/js/main.04770266.js.map"
   },
   "entrypoints": [
     "static/css/main.5021c1c4.css",
-    "static/js/main.eb35142a.js"
+    "static/js/main.04770266.js"
   ]
 }
